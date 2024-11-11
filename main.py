@@ -5,24 +5,19 @@ import telebot
 import threading
 import os
 
-# Use environment variables for the token and group chat ID
-TOKEN = os.getenv('BOT_TOKEN')
-GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
+# Replace 'YOUR_BOT_TOKEN' with your actual Telegram bot token
+TOKEN = '7750958101:AAE35HmvPt377jA-s30PK9IJflPUR1xmBe8'
 bot = telebot.TeleBot(TOKEN, parse_mode='Markdown')  # Set parse mode to Markdown
+
+# Replace 'YOUR_GROUP_CHAT_ID' with your actual group chat ID
+GROUP_CHAT_ID = '-7197786824'  # Ensure this is the correct group chat ID
 
 # Set to store user chat IDs
 user_chat_ids = set()
+xox = open("chek.txt","r")
+a = int(xox.read().strip())
 
-# Read the last article ID from the file, initialize if empty
-try:
-    with open("chek.txt", "r") as xox:
-        content = xox.read().strip()
-        if content:
-            a = int(content)
-        else:
-            a = 387500  # Default starting value if file is empty
-except FileNotFoundError:
-    a = 387500  # Default starting value if file does not exist
+xox.close()
 
 num = 0
 
@@ -75,9 +70,9 @@ def send_news_to_all():
 
             if aa and bb and ff:
                 num = 0
-                with open("chek.txt", "w") as xex:
-                    xex.write(str(a))
-                
+                xex = open("chek.txt","w")
+                xex.write(str(a))
+                xex.close()
                 # Handle <br> tags in the description
                 for br in bb.find_all("br"):
                     br.replace_with("\n")
@@ -122,6 +117,7 @@ def send_news_to_all():
                 # Delete the image after 1 minute
                 threading.Thread(target=delete_file_after_delay, args=(image_path, 60)).start()
 
+                
                 print(a)
             else:
                 print("error404")
@@ -131,8 +127,10 @@ def send_news_to_all():
                 if num == 10:
                     num = 0
                     a -= 10
+            
 
-            time.sleep(30)  # Wait 30 seconds before fetching the next article
+              # Increment to fetch the next article
+            time.sleep(1)  # Wait 30 seconds before fetching the next article
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -140,4 +138,6 @@ def send_news_to_all():
 news_thread = threading.Thread(target=send_news_to_all, daemon=True)
 news_thread.start()
 
+
 bot.polling()
+
